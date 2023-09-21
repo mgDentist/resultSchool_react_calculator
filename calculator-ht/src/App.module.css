@@ -15,6 +15,7 @@
 
 .resultWindow {
   min-height: 100px;
+  font-size: 50px;
 }
 
 .buttonsWrapper {
@@ -35,7 +36,7 @@
   color: green;
 }
 
-.blackText {
+.whiteText {
   color: whitesmoke;
 }
 

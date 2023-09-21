@@ -13,36 +13,59 @@ const App = () => {
 
   const enterNumber = () => {
     return buttonsNumber.map((buttonNumber) => (
-      <button className={styles.button} key={buttonNumber} onClick={() => {
-        setResultString(resultString + buttonNumber)
-      }}>{buttonNumber}</button>
+      <button
+        className={styles.button}
+        key={buttonNumber}
+        onClick={() => {
+          setResultString(resultString + buttonNumber);
+          setGreenText(false);
+        }}
+      >
+        {buttonNumber}
+      </button>
     ))
   }
 
   const doAction = () => {
     return signs.map((sign) => (
-      <button className={styles.button} key={sign} onClick={() => {
-        setResultString(resultString + sign)
-      }}>{sign}</button>
+      <button
+        className={styles.button}
+        key={sign}
+        onClick={() => {
+          setResultString(resultString + sign);
+          setGreenText(false);
+        }}
+      >
+        {sign}
+      </button>
     ))
   }
 
   const showResult = () => {
     return resultsButtons.map((item) => (
-      <button className={styles.button} key={item} onClick={() => {
-        if (item === '=') {
-          try {
-            const result = math.evaluate(resultString);
-            setResultString(result.toString());
-          } catch (error) {
-            setResultString('Ошибка');
+      <button
+        className={styles.button}
+        key={item}
+        onClick={() => {
+          if (item === '=') {
+            try {
+              const result = math.evaluate(resultString);
+              setResultString(result.toString());
+              setGreenText(true);
+            } catch (error) {
+              setResultString('Ошибка');
+              setGreenText(false);
+            }
+          } else {
+            setResultString('');
+            setGreenText(false);
           }
-        } else {
-          setResultString('');
-        }
 
-        setGreenText(!greenText);
-      }}>{item}</button>
+          setGreenText(!greenText);
+        }}
+      >
+        {item}
+      </button>
     ))
   }
 
@@ -51,13 +74,22 @@ const App = () => {
       <header className={styles.header}>
         <h1>Калькулятор мечты</h1>
         <section>
-          <p className={`${greenText ? styles.greenText : styles.blackText} ${styles.resultWindow}`}>{resultString}
+          <p
+            className={`${greenText ? styles.greenText : ''} ${styles.resultWindow}`}
+          >
+            {resultString}
           </p>
-          <div className={styles.buttonsWrapper}>
-            <p className={styles.numberButtons}>
+          <div
+            className={styles.buttonsWrapper}
+          >
+            <p
+              className={styles.numberButtons}
+            >
               {enterNumber()}
             </p>
-            <p className={styles.actionButtons}>
+            <p
+              className={styles.actionButtons}
+            >
               {doAction()}
               {showResult()}
             </p>
