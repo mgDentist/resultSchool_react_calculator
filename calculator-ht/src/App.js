@@ -1,22 +1,68 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from 'react';
+import * as math from 'mathjs';
+import styles from './App.module.css'
 
-function App() {
+const App = () => {
+
+  const buttonsNumber = ['9', '8', '7', '6', '5', '4', '3', '2', '1', '0'];
+  const signs = ['+', '-'];
+  const resultsButtons = ['=', 'C'];
+  const [resultString, setResultString] = useState('');
+  const [greenText, setGreenText] = useState(false);
+
+
+  const enterNumber = () => {
+    return buttonsNumber.map((buttonNumber) => (
+      <button className={styles.button} key={buttonNumber} onClick={() => {
+        setResultString(resultString + buttonNumber)
+      }}>{buttonNumber}</button>
+    ))
+  }
+
+  const doAction = () => {
+    return signs.map((sign) => (
+      <button className={styles.button} key={sign} onClick={() => {
+        setResultString(resultString + sign)
+      }}>{sign}</button>
+    ))
+  }
+
+  const showResult = () => {
+    return resultsButtons.map((item) => (
+      <button className={styles.button} key={item} onClick={() => {
+        if (item === '=') {
+          try {
+            const result = math.evaluate(resultString);
+            setResultString(result.toString());
+          } catch (error) {
+            setResultString('Ошибка');
+          }
+        } else {
+          setResultString('');
+        }
+
+        setGreenText(!greenText);
+      }}>{item}</button>
+    ))
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+    <div className={styles.app}>
+      <header className={styles.header}>
+        <h1>Калькулятор мечты</h1>
+        <section>
+          <p className={`${greenText ? styles.greenText : styles.blackText} ${styles.resultWindow}`}>{resultString}
+          </p>
+          <div className={styles.buttonsWrapper}>
+            <p className={styles.numberButtons}>
+              {enterNumber()}
+            </p>
+            <p className={styles.actionButtons}>
+              {doAction()}
+              {showResult()}
+            </p>
+          </div>
+        </section>
       </header>
     </div>
   );
