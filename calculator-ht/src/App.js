@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import * as math from 'mathjs';
 import styles from './App.module.css'
 
 const App = () => {
@@ -9,6 +8,12 @@ const App = () => {
   const resultsButtons = ['=', 'C'];
   const [resultString, setResultString] = useState('');
   const [greenText, setGreenText] = useState(false);
+
+  function calculateResult (expression) {
+    // eslint-disable-next-line no-new-func
+    const calculate = new Function('return ' + expression + ';');
+    return calculate();
+  }
 
 
   const enterNumber = () => {
@@ -49,7 +54,7 @@ const App = () => {
         onClick={() => {
           if (item === '=') {
             try {
-              const result = math.evaluate(resultString);
+              const result = calculateResult(resultString);
               setResultString(result.toString());
               setGreenText(true);
             } catch (error) {
@@ -60,7 +65,6 @@ const App = () => {
             setResultString('');
             setGreenText(false);
           }
-
           setGreenText(!greenText);
         }}
       >
