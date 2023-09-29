@@ -9,13 +9,6 @@ const App = () => {
   const [resultString, setResultString] = useState('');
   const [greenText, setGreenText] = useState(false);
 
-  function calculateResult (expression) {
-    // eslint-disable-next-line no-new-func
-    const calculate = new Function('return ' + expression + ';');
-    return calculate();
-  }
-
-
   const enterNumber = () => {
     return buttonsNumber.map((buttonNumber) => (
       <button
@@ -46,6 +39,21 @@ const App = () => {
     ))
   }
 
+  const calculateResult = (expression) => {
+    let numbers = expression.split(/[+-]/);
+    let operators = expression.replace(/[0-9]/g,'').split('');
+    let result = parseFloat(numbers[0]);
+
+    for (let i = 0; i < operators.length; i++) {
+      if (operators[i] === '+') {
+        result += parseFloat(numbers[i + 1]);
+      } else if (operators[i] === '-') {
+        result -= parseFloat(numbers[i + 1]);
+      }
+    }
+    return result;
+  }
+
   const showResult = () => {
     return resultsButtons.map((item) => (
       <button
@@ -54,10 +62,11 @@ const App = () => {
         onClick={() => {
           if (item === '=') {
             try {
-              const result = calculateResult(resultString);
+              let result = calculateResult(resultString);
               setResultString(result.toString());
               setGreenText(true);
-            } catch (error) {
+            }
+            catch (error) {
               setResultString('Ошибка');
               setGreenText(false);
             }
